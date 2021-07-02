@@ -16,3 +16,7 @@ export const hotelDetails = (data) => ({
 });
 export const bookingDetails = (data) => ({ type: "ROOM_BOOKING_DETAIL", data });
 export const additionOfPrices = (data) => ({ type: "TOTAL_PRICE_ROOMS", data });
+// export const propertyForAddProperty = (data) => ({
+//   type: "PROPERTY_FOR_ADDPROPERTY",
+//   data,
+// });

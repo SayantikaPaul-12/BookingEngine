@@ -7,35 +7,103 @@ import AddNewRoom2 from "./AddNewRoom2";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
-const initialState = {
-  availability: 0,
-  roomDesc: "",
-  numberOfRooms: 0,
-  roomImage: Imagecard,
-  roomType: "",
-  food: "",
-  availabilityErr: "",
-  roomDescErr: "",
-  roomTypeErr: "",
-  numberOfRoomsErr: "",
-  url11: "",
-  url12: "",
-  url13: "",
-  url14: "",
-  url11Err: "",
-  url12Err: "",
-  addNew: false,
-  price1: 0,
-  price2: 0,
-  price1Err: "",
-  price2Err: "",
-};
+import * as db from "../../api/index";
+
+// const initialState = {
+//   availability: 0,
+//   roomDesc: "",
+//   numberOfRooms: 0,
+//   roomImage: Imagecard,
+//   roomType: "",
+//   food: "",
+//   availabilityErr: "",
+//   roomDescErr: "",
+//   roomTypeErr: "",
+//   numberOfRoomsErr: "",
+//   url11: "",
+//   url12: "",
+//   url13: "",
+//   url14: "",
+//   url11Err: "",
+//   url12Err: "",
+//   addNew: false,
+//   price1: 0,
+//   price2: 0,
+//   price1Err: "",
+//   price2Err: "",
+//   propertyFrom: [],
+//   roomListData: [],
+//   roomId: "",
+// };
 export class AddRooms extends Component {
   constructor(props) {
     super(props);
 
-    this.state = initialState;
+    this.state = {
+      availability: 0,
+      roomDesc: "",
+      numberOfRooms: 0,
+      roomImage: Imagecard,
+      roomType: "",
+      food: "",
+      availabilityErr: "",
+      roomDescErr: "",
+      roomTypeErr: "",
+      numberOfRoomsErr: "",
+      url11: "",
+      url12: "",
+      url13: "",
+      url14: "",
+      url11Err: "",
+      url12Err: "",
+      addNew: false,
+      price1: 0,
+      price2: 0,
+      price1Err: "",
+      price2Err: "",
+      propertyFrom: [],
+      roomListData: [],
+      roomId: "",
+    };
   }
+  componentDidMount() {
+    if (true) {
+      window.scroll(0, 0);
+    }
+    this.getcall();
+  }
+  getcall = async () => {
+    let res = await db.getproperty().catch((err) => {
+      console.log("errorApi");
+    });
+    this.setState({
+      propertyFrom: res,
+    });
+    this.getRoomData();
+  };
+  getRoomData = () => {
+    // console.log("this.state.propertyFrom outside ", this.state.propertyFrom);
+    let id =
+      this.state.propertyFrom[this.state.propertyFrom.length - 1].PropertyId;
+    console.log("ID  = ", id);
+    var env = process.env.NODE_ENV || "development";
+    var host =
+      env === "development"
+        ? "http://localhost:5000"
+        : "http://9a9e6e820483.ngrok.io";
+    axios
+      .get(`${host}/rooms/getRoomType/${id}`)
+      .then((response) => {
+        console.log("response from roomListData = ", response.data);
+        // var roomData = response.data;
+        this.setState({
+          roomListData: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log("error = ", error);
+      });
+  };
   handlenumberOfRooms = (e) => {
     this.setState({
       numberOfRooms: e.target.value,
@@ -47,12 +115,7 @@ export class AddRooms extends Component {
       roomType: e.target.value,
       roomTypeErr: "",
     });
-    console.log("Value of roomType = ", this.state.roomType);
-    console.log("this.props.propertyList", this.props.propertyList);
-    console.log(
-      "this.props.propertyList length = ",
-      this.props.propertyList.length + 1
-    );
+    console.log("this.state.roomListData", this.state.roomListData);
   };
   handleRoomPrice = (e) => {
     this.setState({
@@ -61,7 +124,12 @@ export class AddRooms extends Component {
     });
   };
   handleRoomPriceFood = (e) => {
-    console.log("this.props.rooomDetailsList = ", this.props.roomDetailsList);
+    // console.log("this.props.rooomDetailsList = ", this.props.roomDetailsList);
+    console.log(this.state.roomListData, "roomListData ");
+
+    let n = this.state.roomListData.length;
+    let roomId = this.state.roomListData[n - 1]._id;
+    console.log("roomID = ", roomId);
     this.setState({
       price1: e.target.value,
       price1Err: "",
@@ -89,20 +157,20 @@ export class AddRooms extends Component {
     let url11Err = "";
     let url12Err = "";
 
-    if (!this.state.url11) {
-      url11Err = "Enter price with food";
-      console.log("url11Err = ", url11Err);
-    }
-    if (url11Err) {
-      this.setState({ url11Err });
-    }
-    if (!this.state.url12) {
-      url12Err = "Enter price with food";
-      console.log("url11Err = ", url12Err);
-    }
-    if (url12Err) {
-      this.setState({ url12Err });
-    }
+    // if (!this.state.url11) {
+    //   url11Err = "Enter price with food";
+    //   console.log("url11Err = ", url11Err);
+    // }
+    // if (url11Err) {
+    //   this.setState({ url11Err });
+    // }
+    // if (!this.state.url12) {
+    //   url12Err = "Enter price with food";
+    //   console.log("url11Err = ", url12Err);
+    // }
+    // if (url12Err) {
+    //   this.setState({ url12Err });
+    // }
 
     if (!this.state.availability) {
       availabilityErr = "Enter Total Rooms";
@@ -147,10 +215,15 @@ export class AddRooms extends Component {
   };
   handleSubmit = (event) => {
     event.preventDefault();
+    console.log(this.state.propertyFrom[21], "displayy ");
+
+    let id =
+      this.state.propertyFrom[this.state.propertyFrom.length - 1].PropertyId;
     const isValid = this.isValidForm();
+
     if (isValid) {
       const roomData = {
-        PropertyId: this.props.propertyList.length,
+        PropertyId: id,
         roomType: this.state.roomType,
         roomImage: this.state.url11,
         description: this.state.roomDesc,
@@ -194,11 +267,17 @@ export class AddRooms extends Component {
   };
   handleAddPrice = (event) => {
     event.preventDefault();
+    // console.log("propertyList[23-2]", this.props.propertyList[23 - 2]);
+    let n = this.state.roomListData.length;
+    let roomId = this.state.roomListData[n - 1]._id;
+    console.log("roomID = ", roomId);
+
+    console.log("this.state.roomType = ", this.state.roomType);
     const isValidPrice = this.isValidPrice();
     if (isValidPrice) {
       const priceData = {
-        roomTypeId: "60db57735ec7be06b0886db6",
-        roomType: this.state.roomType,
+        roomTypeId: "60ddb7ea8d16ea055bfc31be",
+        roomType: "18",
         fromDate: "2021-06-30T05:49:20.710Z",
         toDate: "2022-06-30T05:49:20.710Z",
         perDayRate: [this.state.price1, this.state.price2],
@@ -229,7 +308,6 @@ export class AddRooms extends Component {
   handleUrl11 = (e) => {
     this.setState({
       url11: e.target.value,
-      // hotelNameErr: "",
     });
     console.log("url1 - ", this.state.url11);
   };
@@ -448,6 +526,7 @@ export class AddRooms extends Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     propertyList: state.propertyList,
@@ -456,7 +535,6 @@ const mapStateToProps = (state) => {
     adultVal: state.adultVal,
     childVal: state.childVal,
     propertyEmptyList: state.propertyEmptyList,
-    // roomDetailsList:state
     roomDetailsList: state.roomDetailsList,
   };
 };

@@ -6,6 +6,7 @@ const initialState = {
   roomVal: 1,
   adultVal: 1,
   childVal: 0,
+  // propertyforAddPropertyList: [],
 };
 
 export default (state = initialState, action) => {
@@ -74,6 +75,11 @@ export default (state = initialState, action) => {
         ...state,
         totalPriceInState: action.data,
       };
+    // case "PROPERTY_FOR_ADDPROPERTY":
+    //   return {
+    //     ...state,
+    //     propertyforAddPropertyList: action.data,
+    //   };
     default:
       return state;
   }

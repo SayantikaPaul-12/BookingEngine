@@ -165,7 +165,7 @@ class AddProperty extends Component {
       const data = {
         name: this.state.name,
         name_: this.state.name,
-        Image: this.state.Imagecard,
+        Image: [this.state.url1, this.state.url2, this.state.url3],
         location: this.state.city,
         description: this.state.description,
         ratings: this.state.ratings,

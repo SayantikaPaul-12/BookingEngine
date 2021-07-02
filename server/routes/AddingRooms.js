@@ -2,6 +2,7 @@ const express = require("express");
 
 const RoomTypeMaster = require("../Models/RoomTypeMaster");
 const mongoose = require("mongoose");
+const { ObjectId, ObjectID } = require("mongodb");
 
 mongoose.connect(
   `mongodb+srv://sathishm2408:${encodeURIComponent(
@@ -28,6 +29,7 @@ router.get("/getRoomType", async (req, res) => {
 //Submit a post for rooms
 router.post("/addRoomType", async (req, res) => {
   const post = new RoomTypeMaster({
+    _id: new ObjectId(),
     PropertyId: req.body.PropertyId,
     roomType: req.body.roomType,
     roomImage: req.body.roomImage,
@@ -35,6 +37,7 @@ router.post("/addRoomType", async (req, res) => {
     numberofRooms: req.body.numberofRooms,
     availability: req.body.availability,
   });
+  console.log(post);
   try {
     const savedPost = await post.save();
     res.json(savedPost);
@@ -42,6 +45,7 @@ router.post("/addRoomType", async (req, res) => {
     res.status(400).send({ message: err });
   }
 });
+
 //Getting rooms by ProprtyID
 router.get("/getRoomType/:PropertyId", async (req, res) => {
   try {
@@ -53,4 +57,5 @@ router.get("/getRoomType/:PropertyId", async (req, res) => {
     res.status(400).send(err);
   }
 });
+
 module.exports = router;

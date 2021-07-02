@@ -1,39 +1,45 @@
-const mongoose=require('mongoose');
+const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 
-const roomTypeMasterSchema=new mongoose.Schema({
+const roomTypeMasterSchema = new mongoose.Schema({
+    _id: {
+        type: ObjectId,
+        required: true
 
-    PropertyId:{
+    },
+
+    PropertyId: {
         type: Number,
-        required:true
-        
-    },
-    
-    roomType:{
-       type: String,
-       required:true
-    },
-
-    roomImage:{
-       type: String,
-       required: true
-    },
-    
-    description:{
-      type:String,
-      required:true
-    },
-
-    numberofRooms:{
-         type: Number,
-        required:true
+        required: true
 
     },
 
-    availability:{
+    roomType: {
+        type: String,
+        required: true
+    },
+
+    roomImage: {
+        type: String,
+        required: true
+    },
+
+    description: {
+        type: String,
+        required: true
+    },
+
+    numberofRooms: {
         type: Number,
-       required:true
+        required: true
 
-   }
+    },
+
+    availability: {
+        type: Number,
+        required: true
+
+    }
 })
 
-module.exports=roomTypeMaster=mongoose.model('roomTypeMaster',roomTypeMasterSchema);
+module.exports = roomTypeMaster = mongoose.model('roomTypeMaster', roomTypeMasterSchema);

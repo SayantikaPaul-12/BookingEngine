@@ -64,14 +64,28 @@ export class AddRooms extends Component {
       propertyFrom: [],
       roomListData: [],
       roomId: "",
+      fromDate: new Date(),
+      toDate: new Date(),
     };
   }
+
   componentDidMount() {
     if (true) {
       window.scroll(0, 0);
     }
+    this.updateToDate();
+    console.log("todate in did mount", this.state.toDate);
     this.getcall();
   }
+  updateToDate = () => {
+    // var nextDate = new Date();
+    // nextDate.setDate(new Date().getDate() + 1);
+    // this.setState({
+    //   toDate: nextDate,
+    // });
+    // console.log("next in updatetodate = ", nextDate);
+    // console.log("todate in updatetodate = ", this.state.toDate);
+  };
   getcall = async () => {
     let res = await db.getproperty().catch((err) => {
       console.log("errorApi");
@@ -82,7 +96,6 @@ export class AddRooms extends Component {
     this.getRoomData();
   };
   getRoomData = () => {
-    // console.log("this.state.propertyFrom outside ", this.state.propertyFrom);
     let id =
       this.state.propertyFrom[this.state.propertyFrom.length - 1].PropertyId;
     console.log("ID  = ", id);
@@ -95,7 +108,6 @@ export class AddRooms extends Component {
       .get(`${host}/rooms/getRoomType/${id}`)
       .then((response) => {
         console.log("response from roomListData = ", response.data);
-        // var roomData = response.data;
         this.setState({
           roomListData: response.data,
         });
@@ -124,12 +136,10 @@ export class AddRooms extends Component {
     });
   };
   handleRoomPriceFood = (e) => {
-    // console.log("this.props.rooomDetailsList = ", this.props.roomDetailsList);
     console.log(this.state.roomListData, "roomListData ");
 
     let n = this.state.roomListData.length;
-    let roomId = this.state.roomListData[n - 1]._id;
-    console.log("roomID = ", roomId);
+
     this.setState({
       price1: e.target.value,
       price1Err: "",
@@ -156,22 +166,6 @@ export class AddRooms extends Component {
 
     let url11Err = "";
     let url12Err = "";
-
-    // if (!this.state.url11) {
-    //   url11Err = "Enter price with food";
-    //   console.log("url11Err = ", url11Err);
-    // }
-    // if (url11Err) {
-    //   this.setState({ url11Err });
-    // }
-    // if (!this.state.url12) {
-    //   url12Err = "Enter price with food";
-    //   console.log("url11Err = ", url12Err);
-    // }
-    // if (url12Err) {
-    //   this.setState({ url12Err });
-    // }
-
     if (!this.state.availability) {
       availabilityErr = "Enter Total Rooms";
       console.log("availability = ", availabilityErr);
@@ -185,7 +179,6 @@ export class AddRooms extends Component {
     }
     if (roomDescErr) {
       this.setState({ roomDescErr });
-      // return false;
     }
     if (this.state.roomType == "") {
       roomTypeErr = "Enter Address";
@@ -193,7 +186,6 @@ export class AddRooms extends Component {
     }
     if (roomTypeErr) {
       this.setState({ roomTypeErr });
-      // return false;
     }
     if (!this.state.numberOfRooms) {
       numberOfRoomsErr = "Enter Total Rooms";
@@ -203,14 +195,6 @@ export class AddRooms extends Component {
       this.setState({ numberOfRoomsErr });
       return false;
     }
-    // if (!this.state.roomType) {
-    //   roomTypeErr = "Enter Location";
-    //   console.log("roomTypeErr = ", roomTypeErr);
-    // }
-    // if (roomTypeErr) {
-    //   this.setState({ roomTypeErr });
-    //   return false;
-    // }
     return true;
   };
   handleSubmit = (event) => {
@@ -267,21 +251,18 @@ export class AddRooms extends Component {
   };
   handleAddPrice = (event) => {
     event.preventDefault();
-    // console.log("propertyList[23-2]", this.props.propertyList[23 - 2]);
     let n = this.state.roomListData.length;
-    let roomId = this.state.roomListData[n - 1]._id;
-    console.log("roomID = ", roomId);
-
     console.log("this.state.roomType = ", this.state.roomType);
     const isValidPrice = this.isValidPrice();
     if (isValidPrice) {
       const priceData = {
-        roomTypeId: "60ddb7ea8d16ea055bfc31be",
-        roomType: "18",
-        fromDate: "2021-06-30T05:49:20.710Z",
-        toDate: "2022-06-30T05:49:20.710Z",
+        roomTypeId: "60e3447b5eecb206948f6014",
+        roomType: "room-test2",
+        fromDate: this.state.fromDate,
+        toDate: this.state.toDate,
         perDayRate: [this.state.price1, this.state.price2],
         plan: ["AP", "EP"],
+        __v: 0,
       };
       console.log("priceData = ", priceData);
       axios
@@ -293,6 +274,14 @@ export class AddRooms extends Component {
           console.log("Response from price = ", error);
         });
     }
+  };
+  handleSetDate = (e) => {
+    this.setState({
+      fromDate: e.value[0],
+      toDate: e.value[1],
+    });
+    console.log(" after update fromDate = ", this.state.fromDate);
+    console.log(" after update toDate = ", this.state.toDate);
   };
   handleRoomChange = (e) => {
     this.setState({
@@ -316,16 +305,7 @@ export class AddRooms extends Component {
       url12: e.target.value,
     });
   };
-  // handleUrl13 = (e) => {
-  //   this.setState({
-  //     url13: e.target.value,
-  //   });
-  // };
-  // handleUrl14 = (e) => {
-  //   this.setState({
-  //     url14: e.target.value,
-  //   });
-  // };
+
   handleAddNewRoom = (e) => {
     this.setState({
       addNew: !this.state.addNew,
@@ -338,6 +318,7 @@ export class AddRooms extends Component {
       new Date().getMonth(),
       new Date().getDate()
     );
+
     return (
       <div>
         <div className="sectionTwo">
@@ -352,7 +333,6 @@ export class AddRooms extends Component {
                     <div className="setroomImage">
                       <div className="insideAddImagesRoom">
                         <div className="imageHeightRoom">
-                          {/* <input placeholder="dummy"></input> */}
                           <input
                             type="url"
                             name="url11"
@@ -364,14 +344,10 @@ export class AddRooms extends Component {
                             }`}
                           ></input>
                           <div className="imageDivRoom">
-                            <img
-                              src={this.state.url11}
-                              // alt="Add Image Url"
-                            ></img>
+                            <img src={this.state.url11}></img>
                           </div>
                         </div>
                         <div className="imageHeightRoom">
-                          {/* Image URL */}
                           <input
                             type="url"
                             name="url12"
@@ -391,18 +367,6 @@ export class AddRooms extends Component {
                   </div>
                   <div className="roomDataOne">
                     <div className="roomData">
-                      {/* <label htmlFor="option">
-                      </label>
-                      <select
-                        id="option"
-                        value={this.state.roomType}
-                        onChange={this.handleRoomType}
-                      >
-                        <option value="AC">AC</option>
-                        <option value="Non-AC">Non-AC</option>
-                        <option value="Delux">Delux</option>
-                        <option value="Junior Suit">Junior Suit</option>
-                      </select> */}
                       <input
                         name="roomType"
                         type="text"
@@ -448,13 +412,13 @@ export class AddRooms extends Component {
                     <div className="foodPriceData">
                       <DateRangePickerComponent
                         placeholder="Check-in/Check-out"
-                        startDate={this.props.dateRange.start}
-                        endDate={this.props.dateRange.end}
+                        startDate={this.state.fromDate}
+                        endDate={this.state.toDate}
                         min={minValue}
                         format={"dd-MMM-yy"}
                         color={"black"}
                         className="datepicker-input"
-                        onChange={this.handleDateChange}
+                        onChange={this.handleSetDate}
                       ></DateRangePickerComponent>
                       <input
                         id="priceOne"
@@ -479,28 +443,7 @@ export class AddRooms extends Component {
                         required
                       ></input>
                     </div>
-                    <div className="dateData">
-                      {/* <input
-                        name="price1"
-                        type="text"
-                        onChange={this.handleRoomPriceFood}
-                        placeholder=" fromdate "
-                        className={`${
-                          this.state.price1Err !== "" ? "inputError" : ""
-                        }`}
-                        required
-                      ></input>
-                      <input
-                        name="price2"
-                        type="text"
-                        onChange={this.handleRoomPrice}
-                        placeholder=" todate"
-                        className={`${
-                          this.state.price2Err !== "" ? "inputError" : ""
-                        }`}
-                        required
-                      ></input> */}
-                    </div>
+                    <div className="dateData"></div>
                     <div className="addPriceDiv">
                       <button onClick={this.handleAddPrice}>Add Price</button>
                     </div>

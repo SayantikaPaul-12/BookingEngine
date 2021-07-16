@@ -3,15 +3,12 @@ const mongoose = require('mongoose');
 const RateMaster = require('../Models/RateMaster');
 const RoomTypeMaster = require('../Models/RoomTypeMaster');
 const { get } = require('./property');
-// const ratemasters = require('../Models/RateMaster');
-
 
 mongoose.connect(`mongodb+srv://sathishm2408:${encodeURIComponent('S@chu2408')}@cluster0.ifzlg.mongodb.net/BookingEngine?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
 })
-
 const router = express.Router()
 router.use(express.json());
 
@@ -26,6 +23,28 @@ router.post("/rate", async (req, res) => {
     })
 })
 
+//GET API
+router.get("/rate/:roomType", async (req, res) => {
+    try {
+      const posts = await RateMaster.find({roomType:(req.params.roomType)});
+      res.json(posts);
+      console.log(posts);
+    } catch (err) {
+      res.json({ message: err });
+    }
+  });
+
+//GET API
+router.get("/rate", async (req, res) => {
+    try {
+      const posts = await RateMaster.find();
+      res.json(posts);
+      console.log(posts);
+    } catch (err) {
+      res.json({ message: err });
+    }
+  });
+
 // router.get('/getroomType/:PropertyId', async (req, res) => {
 //     try{
 
@@ -35,15 +54,14 @@ router.post("/rate", async (req, res) => {
 
 //     }
 // });
+
+//GET API for getting plan
 router.get('/getplan', async (req, res) => {
-
     //console.log(req.headers)
-
     try {
         let checkInMonth = new Date(req.headers.checkindate).getMonth()
         let rates = []
         const rooms = await RoomTypeMaster.find({ PropertyId: Number(req.headers.propertyid) });
-
         rooms.forEach(async function (room) {
             //console.log("5")
             let post = await RateMaster.find({ roomTypeId: (room._id) });
@@ -57,7 +75,6 @@ router.get('/getplan', async (req, res) => {
                     //console.log("4")
                 }
                 //check month and date
-
             })
             // console.log("2", rates)
         })
@@ -66,18 +83,11 @@ router.get('/getplan', async (req, res) => {
             res.send(rates)
         }
         setTimeout(mycallback,300)
-        
         // res.send(rates)
-        
-
     } catch (err) {
         console.log("error", err)
         res.status(400).send(err)
     }
 });
 
-
-module.exports = router;
-
-
-       
+module.exports = router;       

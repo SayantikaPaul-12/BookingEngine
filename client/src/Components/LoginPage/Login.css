@@ -1,0 +1,53 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+}
+.user {
+  display: flex;
+  padding: 1%;
+  margin-bottom: 5%;
+  justify-content: center;
+  flex-direction: column;
+}
+.password {
+  display: flex;
+  padding: 1%;
+  margin-bottom: 5%;
+  justify-content: center;
+  flex-direction: column;
+}
+.bg-container {
+  box-shadow: 10px 10px 5px #aaaaaa;
+  background: white;
+  border-radius: 12px;
+  padding: 2%;
+}
+.login {
+  margin-bottom: 5%;
+}
+.signup {
+  margin-bottom: 5%;
+  display: flex;
+}
+input {
+  border: 1px solid grey;
+  border-radius: 7px;
+  padding: 2%;
+}
+.login button {
+  border: none;
+  border-radius: 8px;
+  padding: 3% 7%;
+}
+.signup p {
+  color: blue;
+  margin-left: 10%;
+}
+
+.loginHead {
+  margin-bottom: 10%;
+}
+.loginHead h2 {
+  color: #a00a12;
+}

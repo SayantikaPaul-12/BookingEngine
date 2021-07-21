@@ -73,6 +73,7 @@
 }
 #adjustHeight {
   height: 100px;
+  width: 80% !important;
 }
 .submit {
   margin-left: 8%;
@@ -157,14 +158,18 @@
   border: 1px solid #a2a0a0;
 }
 .foodPriceData .e-input-group {
-  width: 19%;
+  width: 20% !important;
   margin-top: 2%;
   margin-left: 0%;
   background: white !important;
   border: 1px solid grey !important;
   border-radius: 12px !important;
 }
-#priceTwo,
+#priceTwo {
+  margin-left: 3%;
+  width: 20%;
+}
 #priceOne {
-  margin-left: 10%;
+  margin-left: 3%;
+  width: 17%;
 }

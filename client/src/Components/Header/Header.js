@@ -44,7 +44,7 @@ class Header extends Component {
               position="right"
               id="addProperty"
               as={NavLink}
-              to="/AddProperty"
+              to="/logIn"
             >
               Add Property
             </Menu.Item>

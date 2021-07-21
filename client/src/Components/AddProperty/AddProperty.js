@@ -206,12 +206,7 @@ class AddProperty extends Component {
       locationErr: "",
     });
   };
-  // handlePropertyId = (e) => {
-  //   this.setState({
-  //     PropertyId: e.target.value,
-  //     PropertyIdErr: "",
-  //   });
-  // };
+
   handleWifi = (e) => {
     this.setState({
       wifi: !this.state.wifi,
@@ -272,11 +267,13 @@ class AddProperty extends Component {
   //   });
   // };
   handleUrl1 = (e) => {
-    this.setState({
-      url1: e.target.value,
-    });
+    this.setState(
+      {
+        url1: e.target.value,
+      },
 
-    console.log("image 1 = ", this.state.url1);
+      () => console.log("image 1 = ", this.state.url1)
+    );
   };
   handleUrl2 = (e) => {
     this.setState({

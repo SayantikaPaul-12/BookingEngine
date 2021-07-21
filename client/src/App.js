@@ -14,6 +14,7 @@ import BasicLayout from "./Components/BookNow/BasicLayout";
 import Form from "./Components/Form/Form";
 import AddProperty from "./Components/AddProperty/AddProperty";
 import Login from "./Components/LoginPage/Login";
+import Register from "./Components/Register/Register";
 
 class App extends Component {
   render() {
@@ -49,6 +50,9 @@ class App extends Component {
             </Route>
             <Route path="/logIn">
               <Login />
+            </Route>
+            <Route>
+              <Register />
             </Route>
           </Switch>
         </div>

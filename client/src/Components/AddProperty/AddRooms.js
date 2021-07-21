@@ -9,64 +9,39 @@ import { withRouter, Link } from "react-router-dom";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import * as db from "../../api/index";
 
-// const initialState = {
-//   availability: 0,
-//   roomDesc: "",
-//   numberOfRooms: 0,
-//   roomImage: Imagecard,
-//   roomType: "",
-//   food: "",
-//   availabilityErr: "",
-//   roomDescErr: "",
-//   roomTypeErr: "",
-//   numberOfRoomsErr: "",
-//   url11: "",
-//   url12: "",
-//   url13: "",
-//   url14: "",
-//   url11Err: "",
-//   url12Err: "",
-//   addNew: false,
-//   price1: 0,
-//   price2: 0,
-//   price1Err: "",
-//   price2Err: "",
-//   propertyFrom: [],
-//   roomListData: [],
-//   roomId: "",
-// };
+const initialState = {
+  availability: 0,
+  roomDesc: "",
+  numberOfRooms: 0,
+  roomImage: Imagecard,
+  roomType: "",
+  food: "",
+  availabilityErr: "",
+  roomDescErr: "",
+  roomTypeErr: "",
+  numberOfRoomsErr: "",
+  url11: "",
+  url12: "",
+  url13: "",
+  url14: "",
+  url11Err: "",
+  url12Err: "",
+  addNew: false,
+  price1: 0,
+  price2: 0,
+  price1Err: "",
+  price2Err: "",
+  propertyFrom: [],
+  roomListData: [],
+  roomId: "",
+  timeOutId: 0,
+  responseId: 0,
+};
 export class AddRooms extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      availability: 0,
-      roomDesc: "",
-      numberOfRooms: 0,
-      roomImage: Imagecard,
-      roomType: "",
-      food: "",
-      availabilityErr: "",
-      roomDescErr: "",
-      roomTypeErr: "",
-      numberOfRoomsErr: "",
-      url11: "",
-      url12: "",
-      url13: "",
-      url14: "",
-      url11Err: "",
-      url12Err: "",
-      addNew: false,
-      price1: 0,
-      price2: 0,
-      price1Err: "",
-      price2Err: "",
-      propertyFrom: [],
-      roomListData: [],
-      roomId: "",
-      fromDate: new Date(),
-      toDate: new Date(),
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -215,17 +190,36 @@ export class AddRooms extends Component {
         availability: this.state.availability,
         _v: 0,
       };
-
-      console.log("this.state = ", roomData);
+      let roomIDNew = 0;
+      // console.log("this.state = ", roomData);
 
       axios
         .post("http://localhost:5000/rooms/addRoomType", roomData)
         .then((res) => {
           console.log("Response from room = ", res);
+          roomIDNew = res.data._id;
+          this.setState({
+            responseId: res.data._id,
+          });
+          console.log("response = = = = = ", this.state.responseId);
+          console.log("ID from response ", roomIDNew);
         })
         .catch((error) => {
           console.log("Response from room = ", error);
         });
+
+      // clearTimeout(this.state.timeOutId);
+      // this.setState({
+      //   roomType: "",
+      //   roomTypeId: "",
+      //   url11: "",
+      //   romDesc: "",
+      //   availability: "",
+      // });
+      // const timeOut = setTimeout(() => this.getLocation(e), 900);
+      // this.setState({
+      //   timeOutId: timeOut,
+      // });
     }
   };
   isValidPrice = () => {
@@ -256,7 +250,7 @@ export class AddRooms extends Component {
     const isValidPrice = this.isValidPrice();
     if (isValidPrice) {
       const priceData = {
-        roomTypeId: "60e3447b5eecb206948f6014",
+        roomTypeId: this.state.responseId,
         roomType: "room-test2",
         fromDate: this.state.fromDate,
         toDate: this.state.toDate,
@@ -407,7 +401,10 @@ export class AddRooms extends Component {
                       ></textarea>
                     </div>
                     <div className="submit">
-                      <button onClick={this.handleSubmit}> Next</button>
+                      <button type="reset" onClick={this.handleSubmit}>
+                        {" "}
+                        Next
+                      </button>
                     </div>
                     <div className="foodPriceData">
                       <DateRangePickerComponent

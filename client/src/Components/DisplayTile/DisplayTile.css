@@ -110,7 +110,7 @@ label {
   justify-content: flex-start;
 }
 label input {
-  margin-left: 0.4em;
+  margin-left: -33%;
 }
 .price-margin {
   margin-top: 0.1em;
